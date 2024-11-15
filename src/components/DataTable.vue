@@ -125,7 +125,6 @@ export default {
         { title: 'Специальность', value: 'jobTitle', align: 'start', sortable: false },
         { title: 'Интересы', value: 'interests', align: 'start', sortable: false },
       ],
-      loading: false,
       isEditing: false,
       isAdding: false,
       nextId: 50,
@@ -280,11 +279,10 @@ export default {
       }
     },
     refreshProfiles() {
-      this.loading = true
-      this.fetchProfiles()
-      setTimeout(() => {
-        this.loading = false
-      }, 3000)
+      this.$store.commit('profiles/setLoading', true)
+      this.fetchProfiles().finally(() => {
+        this.$store.commit('profiles/setLoading', false)
+      })
     },
   },
   mounted() {
