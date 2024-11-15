@@ -34,6 +34,9 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --vt-primary: #0f4c82;
+  --color-hover: #ededed;
 }
 
 @media (prefers-color-scheme: dark) {
