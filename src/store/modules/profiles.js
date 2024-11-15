@@ -116,7 +116,8 @@ const actions = {
   async addProfile({ commit }, newProfile) {
     commit('setLoading', true)
     try {
-      const response = await axios.post('https://retoolapi.dev/ilF1Pj/profiles', newProfile)
+      const { id, ...profileWithoutId } = newProfile
+      const response = await axios.post('https://retoolapi.dev/ilF1Pj/profiles', profileWithoutId)
       commit('addProfile', response.data)
     } catch (error) {
       commit('setError', error.message)

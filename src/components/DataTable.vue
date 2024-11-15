@@ -250,12 +250,8 @@ export default {
       this.statusString = 'false'
     },
     handleSubmit() {
-      const profiles = this.profiles || []
-      const lastProfile = profiles.length > 0 ? profiles[profiles.length - 1] : null
-      const newId = lastProfile ? lastProfile.id + 1 : 1
-
       const updatedProfile = {
-        id: this.isEditing ? this.selectedProfile.id : newId,
+        id: this.isEditing ? this.selectedProfile.id : '',
         status: this.statusString === 'Обработан', // if Обработан, set true value, else false, cause we save true/false
         firstName: this.firstName.trim(),
         lastName: this.lastName.trim(),
