@@ -1,8 +1,16 @@
 <template>
   <v-app-bar class="d-flex justify-content-space-between pl-6 pr-6" color="primary" prominent>
-    <v-app-bar-nav-icon variant="text" @click="toggleDrawer"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon variant="text" size="x-large" @click="toggleDrawer"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-btn icon="mdi-magnify" size="x-large" @click="toggleFilter"></v-btn>
+    <v-btn
+      icon="mdi-magnify"
+      variant="elevated"
+      color="white"
+      size="large"
+      density="comfortable"
+      @click="toggleFilter"
+    >
+    </v-btn>
   </v-app-bar>
 </template>
 
