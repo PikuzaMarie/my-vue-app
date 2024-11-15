@@ -30,10 +30,6 @@ const mutations = {
     state.profiles = profiles
     state.filteredProfiles = profiles
   },
-  setFilters(state, filters) {
-    state.filters = filters
-    this.commit('applyFilters')
-  },
   setFilterState(state, value) {
     state.isFilterOpen = value
   },
@@ -109,6 +105,7 @@ const actions = {
   },
   setFilters({ commit }, filters) {
     commit('setFilters', filters)
+    commit('applyFilters')
   },
   applyFilters({ commit }) {
     commit('applyFilters')
