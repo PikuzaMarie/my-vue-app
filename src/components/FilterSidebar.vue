@@ -58,7 +58,7 @@
         variant="solo"
       />
       <v-card variant="text" class="d-flex justify-space-between mt-6">
-        <v-btn @click="resetFilters" class="mb-1">Сбросить</v-btn>
+        <v-btn @click="resetFiltersFromLocal" class="mb-1">Сбросить</v-btn>
         <v-btn color="primary" @click="applyFilters" class="mb-1">Применить</v-btn>
       </v-card>
     </v-form>
@@ -73,32 +73,17 @@ export default {
     ...mapState('profiles', ['filters', 'isFilterOpen']),
   },
   methods: {
-    ...mapActions('profiles', ['setFilters', 'resetFilters']),
+    ...mapActions('profiles', ['setFilters', 'resetFilters', 'applyFilters', 'updateFilterState']),
     updateFilters() {
       this.setFilters(this.filters)
     },
     applyFilters() {
       this.setFilters(this.filters)
-      this.isFilterOpen = false
+      this.updateFilterState(false)
     },
-    resetFilters() {
-      this.setFilters({
-        firstName: '',
-        lastName: '',
-        company: '',
-        jobTitle: '',
-        phone: '',
-        email: '',
-        interests: '',
-      })
-      this.isFilterOpen = false
-    },
-  },
-  watch: {
-    isFilterOpen(newVal) {
-      if (!newVal) {
-        this.resetFilters()
-      }
+    resetFiltersFromLocal() {
+      this.resetFilters()
+      this.updateFilterState(false)
     },
   },
 }
