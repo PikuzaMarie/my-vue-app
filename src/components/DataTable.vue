@@ -170,8 +170,8 @@ export default {
           )
         },
         email: (value) => {
-          const emailRegex = /^[a-zA-Z]{3,}@[a-zA-Z]{3,}\.[a-zA-Z]{2,}$/
-          return emailRegex.test(value) || 'Неправильный формат почты. Пример: abc@domain.com'
+          const emailRegex = /^[a-zA-Z0-9]{3,}@[a-zA-Z]{3,}\.[a-zA-Z]{2,}$/
+          return emailRegex.test(value) || 'Неправильный формат почты. Пример: abc258@domain.com'
         },
       },
     }
