@@ -76,7 +76,7 @@
       <!-- Dialog with a form to create/update profile -->
       <v-dialog v-model="dialog" max-width="600px" persistent>
         <v-card>
-          <v-card-title>
+          <v-card-title class="pt-4 pl-6">
             <span class="headline">{{ isEditing ? 'Изменить профиль' : 'Создать профиль' }}</span>
           </v-card-title>
           <v-card-text>
@@ -88,6 +88,8 @@
                 label="Статус"
                 :rules="[rules.required]"
                 :items="['Не обработан', 'Обработан']"
+                density="compact"
+                variant="solo"
               >
               </v-select>
 
@@ -95,30 +97,63 @@
                 v-model="firstName"
                 label="Имя"
                 :rules="[rules.required]"
+                density="compact"
+                variant="solo"
               ></v-text-field>
-              <v-text-field v-model="lastName" label="Фамилия" :rules="[required]"></v-text-field>
-              <v-text-field v-model="company" label="Компания" :rules="[required]"></v-text-field>
+              <v-text-field
+                v-model="lastName"
+                label="Фамилия"
+                :rules="[rules.required]"
+                density="compact"
+                variant="solo"
+              ></v-text-field>
+              <v-text-field
+                v-model="company"
+                label="Компания"
+                :rules="[rules.required]"
+                density="compact"
+                variant="solo"
+              ></v-text-field>
               <v-text-field
                 v-model="jobTitle"
                 label="Специальность"
                 :rules="[rules.required]"
+                density="compact"
+                variant="solo"
               ></v-text-field>
               <v-text-field
                 v-model="phone"
                 label="Телефон"
                 :rules="[rules.required, rules.phone]"
+                density="compact"
+                variant="solo"
               ></v-text-field>
               <v-text-field
                 v-model="email"
                 label="E-mail"
                 :rules="[rules.required, rules.email]"
+                density="compact"
+                variant="solo"
               ></v-text-field>
-              <v-text-field v-model="interests" label="Интересы"></v-text-field>
+              <v-text-field
+                v-model="interests"
+                label="Интересы"
+                density="compact"
+                variant="solo"
+              ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn variant="outlined" color="primary" @click="handleCancel">Отмена</v-btn>
-            <v-btn variant="elevated" color="primary" :disabled="!valid" @click="handleSubmit">
+            <v-btn variant="outlined" color="primary" @click="handleCancel" class="mb-1 text-body-2"
+              >Отмена</v-btn
+            >
+            <v-btn
+              variant="elevated"
+              color="primary"
+              :disabled="!valid"
+              @click="handleSubmit"
+              class="mb-1 text-body-2"
+            >
               {{ isEditing ? 'Сохранить изменения' : 'Добавить профиль' }}
             </v-btn>
           </v-card-actions>
