@@ -3,7 +3,7 @@
     <!-- Toolbar with title, refresh btn and dropdown menu -->
     <v-toolbar elevation="1" color="white">
       <div class="d-flex align-center pl-6 pr-6">
-        <v-toolbar-title>Все</v-toolbar-title>
+        <v-toolbar-title>{{ getTitle() }}</v-toolbar-title>
         <v-btn icon @click="fetchProfiles">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
@@ -34,15 +34,15 @@
     <v-alert v-if="error" type="error" dismissible>{{ error }}</v-alert>
     <!-- Data Table with profiles and pagination-->
     <v-data-table
-      :headers="headers"
-      :items="profiles"
+      :headers="getHeaders"
+      :items="filteredProfiles()"
       :loading="loading"
       class="elevation-3"
       @click:row="handleRowClick"
     >
       <template v-slot:item="{ item }">
         <tr @click="handleRowClick(item)" :class="{ 'selected-row': selectedProfile === item }">
-          <td>
+          <td v-if="selectedItemName === 'all'">
             <v-icon v-if="item.status" color="primary">mdi-cloud-check-variant</v-icon>
             <v-icon v-else color="error">mdi-cloud-alert</v-icon>
           </td>
@@ -98,10 +98,12 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  props: {
+    selectedItemName: String,
+  },
   data() {
     return {
       headers: [
-        { title: 'Статус', value: 'status', align: 'start', sortable: false },
         { title: 'Имя', value: 'firstName', align: 'start', sortable: true },
         { title: 'Фамилия', value: 'lastName', align: 'start', sortable: true },
         { title: 'E-mail', value: 'email', align: 'start', sortable: false },
@@ -133,6 +135,15 @@ export default {
       loading: (state) => state.loading,
       error: (state) => state.error,
     }),
+    getHeaders() {
+      if (this.selectedItemName === 'all') {
+        return [
+          { title: 'Статус', value: 'status', align: 'start', sortable: false },
+          ...this.headers,
+        ]
+      }
+      return this.headers
+    },
   },
   methods: {
     ...mapActions('profiles', ['fetchProfiles', 'addProfile', 'updateProfile', 'deleteProfile']),
@@ -215,6 +226,30 @@ export default {
 
       this.dialog = false
       this.selectedProfile = null
+    },
+    getTitle() {
+      switch (this.selectedItemName) {
+        case 'all':
+          return 'Все'
+        case 'processed':
+          return 'Обработанные'
+        case 'unprocessed':
+          return 'Не обработанные'
+        default:
+          return 'Все'
+      }
+    },
+    filteredProfiles() {
+      switch (this.selectedItemName) {
+        case 'all':
+          return this.profiles
+        case 'processed':
+          return this.profiles.filter((item) => item.status)
+        case 'unprocessed':
+          return this.profiles.filter((item) => !item.status)
+        default:
+          return this.profiles
+      }
     },
   },
   mounted() {

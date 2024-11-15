@@ -32,7 +32,7 @@ export default {
     <PageHeader @toggleDrawer="toggleDrawer" />
     <PageSidebar :modelValue="isOpen" @update:modelValue="onSidebarUpdate" />
     <div style="margin: 75px 0 0 345px">
-      <DataTable />
+      <DataTable :selectedItemName="selectedItemName" />
     </div>
   </v-app>
 </template>
