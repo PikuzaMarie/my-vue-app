@@ -35,7 +35,7 @@
     <!-- Data Table with profiles and pagination-->
     <v-data-table
       :headers="getHeaders"
-      :items="filteredProfiles()"
+      :items="filteredProfilesForTable()"
       :loading="loading"
       class="elevation-3"
       @click:row="handleRowClick"
@@ -134,6 +134,7 @@ export default {
       profiles: (state) => state.profiles,
       loading: (state) => state.loading,
       error: (state) => state.error,
+      filteredProfiles: (state) => state.filteredProfiles,
     }),
     getHeaders() {
       if (this.selectedItemName === 'all') {
@@ -239,16 +240,16 @@ export default {
           return 'Все'
       }
     },
-    filteredProfiles() {
+    filteredProfilesForTable() {
       switch (this.selectedItemName) {
         case 'all':
-          return this.profiles
+          return this.filteredProfiles
         case 'processed':
-          return this.profiles.filter((item) => item.status)
+          return this.filteredProfiles.filter((item) => item.status)
         case 'unprocessed':
-          return this.profiles.filter((item) => !item.status)
+          return this.filteredProfiles.filter((item) => !item.status)
         default:
-          return this.profiles
+          return this.filteredProfiles
       }
     },
     refreshProfiles() {

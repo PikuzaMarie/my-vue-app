@@ -2,7 +2,7 @@
   <v-app-bar class="d-flex justify-content-space-between pl-6 pr-6" color="primary" prominent>
     <v-app-bar-nav-icon variant="text" @click="toggleDrawer"></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-icon icon="mdi-magnify" size="x-large" />
+    <v-btn icon="mdi-magnify" size="x-large" @click="toggleFilter"></v-btn>
   </v-app-bar>
 </template>
 
@@ -11,8 +11,12 @@ import { mapActions } from 'vuex'
 export default {
   methods: {
     ...mapActions('sidebar', { updateSidebarState: 'updateSidebarState' }),
+    ...mapActions('profiles', { updateFilterState: 'updateFilterState' }),
     toggleDrawer() {
       this.updateSidebarState(!this.$store.state.sidebar.isOpen)
+    },
+    toggleFilter() {
+      this.updateFilterState(!this.$store.state.profiles.isFilterOpen)
     },
   },
 }
