@@ -1,109 +1,130 @@
 <template>
-  <div>
-    <!-- Toolbar with title, refresh btn and dropdown menu -->
-    <v-toolbar elevation="1" color="white">
-      <div class="d-flex align-center pl-6 pr-6">
-        <v-toolbar-title>{{ getTitle() }}</v-toolbar-title>
-        <v-btn icon @click="refreshProfiles" color="primary">
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
-      </div>
-      <v-spacer></v-spacer>
-      <v-menu open-on-hover close-on-content-click location="bottom">
-        <!--slot for dialog activation-->
-        <template v-slot:activator="{ props }">
-          <v-btn variant="elevated" color="primary" append-icon="mdi-menu-down" v-bind="props">
-            Действия
+  <div class="container">
+    <v-sheet elevation="4" class="pl-8 pr-5">
+      <!-- Toolbar with title, refresh btn and dropdown menu -->
+      <v-toolbar color="white" class="d-flex align-center">
+        <div class="d-flex align-center">
+          <v-toolbar-title class="text-h6">{{ getTitle() }}</v-toolbar-title>
+          <v-btn icon @click="refreshProfiles" color="primary">
+            <v-icon>mdi-refresh</v-icon>
           </v-btn>
-        </template>
-        <v-list>
-          <v-list-item @click="addProfileFromLocal">
-            <v-list-item-title>Создать</v-list-item-title>
-          </v-list-item>
+        </div>
+        <v-spacer></v-spacer>
+        <v-menu open-on-hover close-on-content-click location="bottom">
           <!--slot for dialog activation-->
-          <v-list-item @click="selectedProfile ? updateProfileFromLocal(selectedProfile) : null">
-            <v-list-item-title>Изменить</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="selectedProfile ? deleteProfileFromLocal(selectedProfile.id) : null">
-            <v-list-item-title>Удалить</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-toolbar>
-    <!--Error alert if any occur-->
-    <v-alert v-if="error" type="error" dismissible>{{ error }}</v-alert>
-    <!-- Data Table with profiles and pagination-->
-    <v-data-table
-      :headers="getHeaders"
-      :items="filteredProfilesForTable()"
-      :loading="loading"
-      class="elevation-3"
-      @click:row="handleRowClick"
-    >
-      <template v-slot:item="{ item }">
-        <tr @click="handleRowClick(item)" :class="{ 'selected-row': selectedProfile === item }">
-          <td v-if="selectedItemName === 'all'">
-            <v-icon v-if="item.status" color="primary">mdi-cloud-check-variant</v-icon>
-            <v-icon v-else color="error">mdi-cloud-alert</v-icon>
-          </td>
-          <td>{{ item.firstName }}</td>
-          <td>{{ item.lastName }}</td>
-          <td>{{ item.company }}</td>
-          <td>{{ item.jobTitle }}</td>
-          <td>{{ item.phone }}</td>
-          <td>{{ item.email }}</td>
-          <td>{{ item.interests }}</td>
-        </tr>
-      </template>
-    </v-data-table>
-
-    <!-- Dialog with a form to create/update profile -->
-    <v-dialog v-model="dialog" max-width="600px" persistent>
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ isEditing ? 'Изменить профиль' : 'Создать профиль' }}</span>
-        </v-card-title>
-        <v-card-text>
-          <!-- Profile form -->
-          <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
-            <v-select
-              v-if="isEditing"
-              v-model="statusString"
-              label="Статус"
-              :rules="[rules.required]"
-              :items="['Не обработан', 'Обработан']"
+          <template v-slot:activator="{ props }">
+            <v-btn
+              variant="elevated"
+              color="primary"
+              append-icon="mdi-menu-down"
+              v-bind="props"
+              class="pl-13 pr-13 text-body-2"
             >
-            </v-select>
+              Действия
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item @click="addProfileFromLocal" class="mt-1 mr-2 mb-1 ml-2">
+              <v-list-item-title class="text-body-2">Создать</v-list-item-title>
+            </v-list-item>
+            <!--slot for dialog activation-->
+            <v-list-item
+              @click="selectedProfile ? updateProfileFromLocal(selectedProfile) : null"
+              class="mt-1 mr-2 mb-1 ml-2"
+            >
+              <v-list-item-title class="text-body-2">Изменить</v-list-item-title>
+            </v-list-item>
+            <v-list-item
+              @click="selectedProfile ? deleteProfileFromLocal(selectedProfile.id) : null"
+              class="mt-1 mr-2 mb-1 ml-2"
+            >
+              <v-list-item-title class="text-body-2">Удалить</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar>
+      <!--Error alert if any occur-->
+      <v-alert v-if="error" type="error" dismissible>{{ error }}</v-alert>
+      <!-- Data Table with profiles and pagination-->
+      <v-data-table
+        :headers="getHeaders"
+        :items="filteredProfilesForTable()"
+        :loading="loading"
+        @click:row="handleRowClick"
+        items-per-page-text="Количество элементов на странице:"
+        page-text="{0}-{1} из {2}"
+      >
+        <template v-slot:item="{ item }">
+          <tr @click="handleRowClick(item)" :class="{ 'selected-row': selectedProfile === item }">
+            <td v-if="selectedItemName === 'all'">
+              <v-icon v-if="item.status" color="primary" size="28px"
+                >mdi-cloud-check-variant</v-icon
+              >
+              <v-icon v-else color="error" size="28px">mdi-cloud-alert</v-icon>
+            </td>
+            <td>{{ item.firstName }}</td>
+            <td>{{ item.lastName }}</td>
+            <td>{{ item.company }}</td>
+            <td>{{ item.jobTitle }}</td>
+            <td>{{ item.phone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.interests }}</td>
+          </tr>
+        </template>
+      </v-data-table>
 
-            <v-text-field v-model="firstName" label="Имя" :rules="[rules.required]"></v-text-field>
-            <v-text-field v-model="lastName" label="Фамилия" :rules="[required]"></v-text-field>
-            <v-text-field v-model="company" label="Компания" :rules="[required]"></v-text-field>
-            <v-text-field
-              v-model="jobTitle"
-              label="Специальность"
-              :rules="[rules.required]"
-            ></v-text-field>
-            <v-text-field
-              v-model="phone"
-              label="Телефон"
-              :rules="[rules.required, rules.phone]"
-            ></v-text-field>
-            <v-text-field
-              v-model="email"
-              label="E-mail"
-              :rules="[rules.required, rules.email]"
-            ></v-text-field>
-            <v-text-field v-model="interests" label="Интересы"></v-text-field>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn variant="outlined" color="primary" @click="handleCancel">Отмена</v-btn>
-          <v-btn variant="elevated" color="primary" :disabled="!valid" @click="handleSubmit">
-            {{ isEditing ? 'Сохранить изменения' : 'Добавить профиль' }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      <!-- Dialog with a form to create/update profile -->
+      <v-dialog v-model="dialog" max-width="600px" persistent>
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{ isEditing ? 'Изменить профиль' : 'Создать профиль' }}</span>
+          </v-card-title>
+          <v-card-text>
+            <!-- Profile form -->
+            <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
+              <v-select
+                v-if="isEditing"
+                v-model="statusString"
+                label="Статус"
+                :rules="[rules.required]"
+                :items="['Не обработан', 'Обработан']"
+              >
+              </v-select>
+
+              <v-text-field
+                v-model="firstName"
+                label="Имя"
+                :rules="[rules.required]"
+              ></v-text-field>
+              <v-text-field v-model="lastName" label="Фамилия" :rules="[required]"></v-text-field>
+              <v-text-field v-model="company" label="Компания" :rules="[required]"></v-text-field>
+              <v-text-field
+                v-model="jobTitle"
+                label="Специальность"
+                :rules="[rules.required]"
+              ></v-text-field>
+              <v-text-field
+                v-model="phone"
+                label="Телефон"
+                :rules="[rules.required, rules.phone]"
+              ></v-text-field>
+              <v-text-field
+                v-model="email"
+                label="E-mail"
+                :rules="[rules.required, rules.email]"
+              ></v-text-field>
+              <v-text-field v-model="interests" label="Интересы"></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn variant="outlined" color="primary" @click="handleCancel">Отмена</v-btn>
+            <v-btn variant="elevated" color="primary" :disabled="!valid" @click="handleSubmit">
+              {{ isEditing ? 'Сохранить изменения' : 'Добавить профиль' }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-sheet>
   </div>
 </template>
 
@@ -119,10 +140,10 @@ export default {
       headers: [
         { title: 'Имя', value: 'firstName', align: 'start', sortable: true },
         { title: 'Фамилия', value: 'lastName', align: 'start', sortable: true },
-        { title: 'E-mail', value: 'email', align: 'start', sortable: false },
-        { title: 'Телефон', value: 'phone', align: 'start', sortable: false },
         { title: 'Компания', value: 'company', align: 'start', sortable: false },
         { title: 'Специальность', value: 'jobTitle', align: 'start', sortable: false },
+        { title: 'Телефон', value: 'phone', align: 'start', sortable: false },
+        { title: 'E-mail', value: 'email', align: 'start', sortable: false },
         { title: 'Интересы', value: 'interests', align: 'start', sortable: false },
       ],
       isEditing: false,
@@ -291,7 +312,15 @@ export default {
 }
 </script>
 <style>
+.container {
+  position: relative;
+  margin: 70px 0 4px 350px;
+}
+thead tr th span {
+  font-weight: 600;
+}
+tbody tr:hover,
 .selected-row {
-  background-color: #e0e0e0;
+  background-color: var(--color-hover);
 }
 </style>

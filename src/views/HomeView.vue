@@ -41,11 +41,13 @@ export default {
 
 <template>
   <v-app>
-    <PageHeader @toggleDrawer="toggleDrawer" @toggleFilter="toggleFilter" />
-    <PageSidebar :modelValue="isOpen" @update:modelValue="onSidebarUpdate" />
-    <FilterSidebar :modelValue="isFilterOpen" @update:modelValue="onFilterUpdate" />
-    <div style="margin: 75px 0 0 345px">
+    <header>
+      <PageHeader @toggleDrawer="toggleDrawer" @toggleFilter="toggleFilter" />
+      <PageSidebar :modelValue="isOpen" @update:modelValue="onSidebarUpdate" />
+      <FilterSidebar :modelValue="isFilterOpen" @update:modelValue="onFilterUpdate" />
+    </header>
+    <main>
       <DataTable :selectedItemName="selectedItemName" />
-    </div>
+    </main>
   </v-app>
 </template>
