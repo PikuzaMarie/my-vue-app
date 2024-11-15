@@ -1,10 +1,10 @@
 <template>
-  <v-navigation-drawer v-model="isOpen" :width="335" permanent>
-    <v-list>
-      <v-list-item title="Профили"></v-list-item>
+  <v-navigation-drawer v-model="isOpen" :width="337" class="elevation-1" permanent>
+    <v-list class="d-flex flex-md-column ga-md-2 pl-7 pt-8 pr-0 pb-0">
+      <v-list-item-title class="text-h6">Профили</v-list-item-title>
       <v-list-item
         link
-        :class="{ 'selected-item': selectedItemName === 'all' }"
+        :class="[{ 'selected-item': selectedItemName === 'all' }, 'text-subtitle-2 pl-0']"
         @click="selectItem('all')"
       >
         <v-icon icon="mdi-check-circle" size="large" color="primary" />
@@ -12,15 +12,15 @@
       </v-list-item>
       <v-list-item
         link
-        :class="{ 'selected-item': selectedItemName === 'processed' }"
+        :class="[{ 'selected-item': selectedItemName === 'processed' }, ' pl-0']"
         @click="selectItem('processed')"
       >
-        <v-icon icon="mdi-alert-circle" size="large" color="primary" />
+        <v-icon icon="mdi-check-circle" size="large" color="primary" />
         Обработанные
       </v-list-item>
       <v-list-item
         link
-        :class="{ 'selected-item': selectedItemName === 'unprocessed' }"
+        :class="[{ 'selected-item': selectedItemName === 'unprocessed' }, 'text-subtitle-2 pl-0']"
         @click="selectItem('unprocessed')"
       >
         <v-icon icon="mdi-alert-circle" size="large" color="primary" />
@@ -46,6 +46,7 @@ export default {
 </script>
 <style>
 .selected-item {
-  background-color: #e4e4e4;
+  font-weight: 500;
+  color: #0f4c82;
 }
 </style>
