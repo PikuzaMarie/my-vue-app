@@ -47,6 +47,6 @@ export default {
 <style>
 .selected-item {
   font-weight: 500;
-  color: #0f4c82;
+  color: var(--vt-primary);
 }
 </style>
