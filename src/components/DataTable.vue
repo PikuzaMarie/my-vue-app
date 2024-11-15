@@ -4,7 +4,7 @@
     <v-toolbar elevation="1" color="white">
       <div class="d-flex align-center pl-6 pr-6">
         <v-toolbar-title>{{ getTitle() }}</v-toolbar-title>
-        <v-btn icon @click="fetchProfiles">
+        <v-btn icon @click="refreshProfiles" color="primary">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
       </div>
@@ -250,6 +250,13 @@ export default {
         default:
           return this.profiles
       }
+    },
+    refreshProfiles() {
+      this.loading = true
+      this.fetchProfiles()
+      setTimeout(() => {
+        this.loading = false
+      }, 3000)
     },
   },
   mounted() {
