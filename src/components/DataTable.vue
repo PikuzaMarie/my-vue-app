@@ -70,16 +70,29 @@
               v-if="isEditing"
               v-model="statusString"
               label="Статус"
+              :rules="[rules.required]"
               :items="['Не обработан', 'Обработан']"
             >
             </v-select>
 
-            <v-text-field v-model="firstName" label="Имя" required></v-text-field>
-            <v-text-field v-model="lastName" label="Фамилия" required></v-text-field>
-            <v-text-field v-model="company" label="Компания" required></v-text-field>
-            <v-text-field v-model="jobTitle" label="Специальность" required></v-text-field>
-            <v-text-field v-model="phone" label="Телефон" required></v-text-field>
-            <v-text-field v-model="email" label="E-mail" required></v-text-field>
+            <v-text-field v-model="firstName" label="Имя" :rules="[rules.required]"></v-text-field>
+            <v-text-field v-model="lastName" label="Фамилия" :rules="[required]"></v-text-field>
+            <v-text-field v-model="company" label="Компания" :rules="[required]"></v-text-field>
+            <v-text-field
+              v-model="jobTitle"
+              label="Специальность"
+              :rules="[rules.required]"
+            ></v-text-field>
+            <v-text-field
+              v-model="phone"
+              label="Телефон"
+              :rules="[rules.required, rules.phone]"
+            ></v-text-field>
+            <v-text-field
+              v-model="email"
+              label="E-mail"
+              :rules="[rules.required, rules.email]"
+            ></v-text-field>
             <v-text-field v-model="interests" label="Интересы"></v-text-field>
           </v-form>
         </v-card-text>
@@ -127,6 +140,20 @@ export default {
       phone: '',
       email: '',
       interests: '',
+      rules: {
+        required: (value) => !!value || 'Обязательное поле',
+        phone: (value) => {
+          const phoneRegex = /^[\d\(\)\-\+\s]+$/
+          return (
+            phoneRegex.test(value) ||
+            'Номер телефона может содержать только цифры, (), -, + и пробелы'
+          )
+        },
+        email: (value) => {
+          const emailRegex = /^[a-zA-Z]{3,}@[a-zA-Z]{3,}\.[a-zA-Z]{2,}$/
+          return emailRegex.test(value) || 'Неправильный формат почты. Пример: abc@domain.com'
+        },
+      },
     }
   },
   computed: {
