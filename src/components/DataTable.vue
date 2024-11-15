@@ -163,7 +163,7 @@ export default {
       rules: {
         required: (value) => !!value || 'Обязательное поле',
         phone: (value) => {
-          const phoneRegex = /^[\d\(\)\-\+\s]+$/
+          const phoneRegex = /^[\d()\-+\s]+$/
           return (
             phoneRegex.test(value) ||
             'Номер телефона может содержать только цифры, (), -, + и пробелы'
