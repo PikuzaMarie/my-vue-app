@@ -313,6 +313,7 @@ export default {
 </script>
 <style>
 .container {
+  width: 75%;
   position: relative;
   margin: 70px 0 4px 350px;
 }
