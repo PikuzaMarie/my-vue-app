@@ -35,7 +35,7 @@
               <v-list-item-title class="text-body-2">Изменить</v-list-item-title>
             </v-list-item>
             <v-list-item
-              @click="selectedProfile ? deleteProfileFromLocal(selectedProfile.id) : null"
+              @click="selectedProfile ? openDeleteDialog() : null"
               class="mt-1 mr-2 mb-1 ml-2"
             >
               <v-list-item-title class="text-body-2">Удалить</v-list-item-title>
@@ -43,6 +43,33 @@
           </v-list>
         </v-menu>
       </v-toolbar>
+      <!--Confirm deletion dialog-->
+      <v-dialog v-model="deleteDialog" max-width="400px" persistent>
+        <v-card>
+          <v-card-title class="pt-4 pl-6">
+            <span class="headline">Подтверждение удаления</span>
+          </v-card-title>
+          <v-card-text> Вы уверены, что хотите удалить этот профиль? </v-card-text>
+          <v-card-actions>
+            <v-btn
+              variant="elevated"
+              color="white"
+              @click="handleCancelDelete"
+              class="mb-1 text-body-2"
+            >
+              Отмена
+            </v-btn>
+            <v-btn
+              variant="elevated"
+              color="primary"
+              @click="handleConfirmDelete"
+              class="mb-1 text-body-2"
+            >
+              Удалить
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!--Error alert if any occur-->
       <v-alert v-if="error" type="error" dismissible>{{ error }}</v-alert>
       <!-- Data Table with profiles and pagination-->
@@ -262,10 +289,15 @@ export default {
       this.statusString = this.selectedProfile.status ? 'Обработан' : 'Не обработан'
       this.dialog = true
     },
-    deleteProfileFromLocal() {
-      if (confirm('Вы уверены, что хотите удалить этот профиль?')) {
+    openDeleteDialog() {
+      this.deleteDialog = true
+    },
+    handleConfirmDelete() {
         this.deleteProfile(this.selectedProfile.id)
-      }
+      this.deleteDialog = false
+    },
+    handleCancelDelete() {
+      this.deleteDialog = false
     },
     handleCancel() {
       this.dialog = false
