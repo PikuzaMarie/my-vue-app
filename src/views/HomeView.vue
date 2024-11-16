@@ -12,27 +12,27 @@ export default {
     FilterSidebar,
   },
   computed: {
-    ...mapState('sidebar', ['isOpen', 'selectedItemName']),
+    ...mapState('sidebar', ['isSidebarOpen', 'selectedTabName']),
     ...mapState('profiles', ['isFilterOpen']),
   },
   methods: {
     ...mapActions('sidebar', {
-      updateSidebarState: 'updateDrawerState',
-      updateSelectedItemName: 'updateSelectedItemName',
+      updateSidebarState: 'updateSidebarState',
+      updateselectedTabName: 'updateSelectedTabName',
     }),
     ...mapActions('profiles', {
       updateFilterState: 'updateFilterState',
     }),
-    toggleDrawer() {
-      this.updateSidebarState(!this.isOpen)
+    toggleSidebar() {
+      this.updateSidebarState(!this.isSidebarOpen)
     },
-    onSidebarUpdate(newState) {
+    updateSidebarStateHandler(newState) {
       this.updateSidebarState(newState)
     },
     toggleFilter() {
-      this.updateFilterState(!this.isOpen)
+      this.updateFilterState(!this.isFilterOpen)
     },
-    onFilterUpdate(newState) {
+    updateFilterStateHandler(newState) {
       this.updateFilterState(newState)
     },
   },
@@ -42,12 +42,13 @@ export default {
 <template>
   <v-app>
     <header>
-      <PageHeader @toggleDrawer="toggleDrawer" @toggleFilter="toggleFilter" />
-      <PageSidebar :modelValue="isOpen" @update:modelValue="onSidebarUpdate" />
-      <FilterSidebar :modelValue="isFilterOpen" @update:modelValue="onFilterUpdate" />
+      <PageHeader @toggleSidebar="toggleSidebar" @toggleFilter="toggleFilter" />
+
+      <FilterSidebar :modelValue="isFilterOpen" @update:modelValue="updateFilterStateHandler" />
     </header>
     <main>
-      <DataTable :selectedItemName="selectedItemName" />
+      <PageSidebar :modelValue="isSidebarOpen" @update:modelValue="updateSidebarStateHandler" />
+      <DataTable :selectedTabName="selectedTabName" />
     </main>
   </v-app>
 </template>

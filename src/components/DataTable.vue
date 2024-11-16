@@ -4,7 +4,7 @@
       <!-- Toolbar with title, refresh btn and dropdown menu -->
       <v-toolbar color="white" class="d-flex align-center pl-4">
         <div class="d-flex align-center">
-          <v-toolbar-title class="text-h6">{{ getTitle() }}</v-toolbar-title>
+          <v-toolbar-title class="text-h6">{{ getActiveTabTitle() }}</v-toolbar-title>
           <v-btn icon @click="refreshProfiles" color="primary">
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
@@ -24,12 +24,11 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item @click="addProfileFromLocal" class="mt-1 mr-2 mb-1 ml-2">
+            <v-list-item @click="openCreateDialog" class="mt-1 mr-2 mb-1 ml-2">
               <v-list-item-title class="text-body-2">Создать</v-list-item-title>
             </v-list-item>
-            <!--slot for dialog activation-->
             <v-list-item
-              @click="selectedProfile ? updateProfileFromLocal(selectedProfile) : null"
+              @click="selectedProfile ? openUpdateDialog(selectedProfile) : null"
               class="mt-1 mr-2 mb-1 ml-2"
             >
               <v-list-item-title class="text-body-2">Изменить</v-list-item-title>
@@ -44,7 +43,7 @@
         </v-menu>
       </v-toolbar>
       <!--Confirm deletion dialog-->
-      <v-dialog v-model="deleteDialog" max-width="400px" persistent>
+      <v-dialog v-model="showDeleteDialog" max-width="400px" persistent>
         <v-card>
           <v-card-title class="pt-4 pl-6">
             <span class="headline">Подтверждение удаления</span>
@@ -87,19 +86,19 @@
         :headers="getHeaders"
         :items="filteredProfilesForTable()"
         :loading="loading"
-        @click:row="handleRowClick"
-        class="d-flex flex-column flex-md-grow-1"
         items-per-page-text="Количество элементов на странице:"
         :items-per-page-options="[5, 10, 20, 50, -1]"
         :items-per-page="5"
         page-text="{0}-{1} из {2}"
+        class="d-flex flex-column flex-md-grow-1"
+        @click:row="handleRowClick"
       >
         <template v-slot:item="{ item }">
           <tr @click="handleRowClick(item)" :class="{ 'selected-row': selectedProfile === item }">
-            <td v-if="selectedItemName === 'all'">
-              <v-icon v-if="item.status" color="primary" size="28px"
-                >mdi-cloud-check-variant</v-icon
-              >
+            <td v-if="selectedTabName === 'all'">
+              <v-icon v-if="item.status" color="primary" size="28px">
+                mdi-cloud-check-variant
+              </v-icon>
               <v-icon v-else color="error" size="28px">mdi-cloud-alert</v-icon>
             </td>
             <td>{{ item.firstName }}</td>
@@ -112,16 +111,15 @@
           </tr>
         </template>
       </v-data-table>
-
       <!-- Dialog with a form to create/update profile -->
-      <v-dialog v-model="dialog" max-width="600px" persistent>
+      <v-dialog v-model="showCreateUpdateDialog" max-width="600px" persistent>
         <v-card>
           <v-card-title class="pt-4 pl-6">
             <span class="headline">{{ isEditing ? 'Изменить профиль' : 'Создать профиль' }}</span>
           </v-card-title>
           <v-card-text>
             <!-- Profile form -->
-            <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
+            <v-form ref="form" v-model="isFormValid" @submit.prevent="handleSubmit">
               <v-select
                 v-if="isEditing"
                 v-model="statusString"
@@ -132,7 +130,6 @@
                 variant="solo"
               >
               </v-select>
-
               <v-text-field
                 v-model="firstName"
                 label="Имя"
@@ -184,13 +181,18 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn variant="outlined" color="primary" @click="handleCancel" class="mb-1 text-body-2"
-              >Отмена</v-btn
+            <v-btn
+              variant="elevated"
+              color="white"
+              @click="handleCancelCreateUpdate"
+              class="mb-1 text-body-2"
             >
+              Отмена
+            </v-btn>
             <v-btn
               variant="elevated"
               color="primary"
-              :disabled="!valid"
+              :disabled="!isFormValid"
               @click="handleSubmit"
               class="mb-1 text-body-2"
             >
@@ -208,7 +210,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   props: {
-    selectedItemName: String,
+    selectedTabName: String,
   },
   data() {
     return {
@@ -223,9 +225,9 @@ export default {
       ],
       isEditing: false,
       isAdding: false,
-      nextId: 50,
-      dialog: false,
-      valid: false,
+      showCreateUpdateDialog: false,
+      showDeleteDialog: false,
+      isFormValid: false,
       selectedProfile: null,
       statusString: 'Не обработан',
       firstName: '',
@@ -259,7 +261,7 @@ export default {
       filteredProfiles: (state) => state.filteredProfiles,
     }),
     getHeaders() {
-      if (this.selectedItemName === 'all') {
+      if (this.selectedTabName === 'all') {
         return [
           { title: 'Статус', value: 'status', align: 'start', sortable: false },
           ...this.headers,
@@ -278,18 +280,12 @@ export default {
         console.log(this.selectedProfile.id)
       }
     },
-    addNewProfile(newProfile) {
-      const profileWithId = { id: this.nextId, ...newProfile }
-      this.nextId += 1
-      this.addProfile(profileWithId)
-      this.dialog = false
-    },
-    addProfileFromLocal() {
+    openCreateDialog() {
       this.selectedProfile = null
       this.isEditing = false
-      this.dialog = true
+      this.showCreateUpdateDialog = true
     },
-    updateProfileFromLocal() {
+    openUpdateDialog() {
       this.isEditing = true
       this.selectedProfile = { ...this.selectedProfile }
       this.firstName = this.selectedProfile.firstName
@@ -300,20 +296,24 @@ export default {
       this.email = this.selectedProfile.email
       this.interests = this.selectedProfile.interests
       this.statusString = this.selectedProfile.status ? 'Обработан' : 'Не обработан'
-      this.dialog = true
+      this.showCreateUpdateDialog = true
+    },
+    handleCreateProfile(newProfile) {
+      this.addProfile(newProfile)
+      this.showCreateUpdateDialog = false
     },
     openDeleteDialog() {
-      this.deleteDialog = true
+      this.showDeleteDialog = true
     },
     handleConfirmDelete() {
-        this.deleteProfile(this.selectedProfile.id)
-      this.deleteDialog = false
+      this.deleteProfile(this.selectedProfile.id)
+      this.showDeleteDialog = false
     },
     handleCancelDelete() {
-      this.deleteDialog = false
+      this.showDeleteDialog = false
     },
-    handleCancel() {
-      this.dialog = false
+    handleCancelCreateUpdate() {
+      this.showCreateUpdateDialog = false
       this.isEditing = false
       this.isAdding = false
       this.selectedProfile = null
@@ -351,8 +351,8 @@ export default {
       this.dialog = false
       this.selectedProfile = null
     },
-    getTitle() {
-      switch (this.selectedItemName) {
+    getActiveTabTitle() {
+      switch (this.selectedTabName) {
         case 'all':
           return 'Все'
         case 'processed':
@@ -364,7 +364,7 @@ export default {
       }
     },
     filteredProfilesForTable() {
-      switch (this.selectedItemName) {
+      switch (this.selectedTabName) {
         case 'all':
           return this.filteredProfiles
         case 'processed':

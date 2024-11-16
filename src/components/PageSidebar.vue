@@ -1,27 +1,27 @@
 <template>
-  <v-navigation-drawer v-model="isOpen" :width="337" class="elevation-1" permanent>
+  <v-navigation-drawer v-model="isSidebarOpen" width="337" class="elevation-2" permanent>
     <v-list class="d-flex flex-md-column ga-md-2 pl-7 pt-8 pr-0 pb-0">
       <v-list-item-title class="text-h6">Профили</v-list-item-title>
       <v-list-item
         link
-        :class="[{ 'selected-item': selectedItemName === 'all' }, 'text-subtitle-2 pl-0']"
-        @click="selectItem('all')"
+        :class="[{ 'selected-tab': selectedTabName === 'all' }, 'text-subtitle-2 pl-0']"
+        @click="selectTab('all')"
       >
         <v-icon icon="mdi-check-circle" size="large" color="primary" />
         Все
       </v-list-item>
       <v-list-item
         link
-        :class="[{ 'selected-item': selectedItemName === 'processed' }, ' pl-0']"
-        @click="selectItem('processed')"
+        :class="[{ 'selected-tab': selectedTabName === 'processed' }, 'text-subtitle-2 pl-0']"
+        @click="selectTab('processed')"
       >
         <v-icon icon="mdi-check-circle" size="large" color="primary" />
         Обработанные
       </v-list-item>
       <v-list-item
         link
-        :class="[{ 'selected-item': selectedItemName === 'unprocessed' }, 'text-subtitle-2 pl-0']"
-        @click="selectItem('unprocessed')"
+        :class="[{ 'selected-tab': selectedTabName === 'unprocessed' }, 'text-subtitle-2 pl-0']"
+        @click="selectTab('unprocessed')"
       >
         <v-icon icon="mdi-alert-circle" size="large" color="primary" />
         Не обработанные
@@ -34,18 +34,18 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState('sidebar', ['isOpen', 'selectedItemName']),
+    ...mapState('sidebar', ['isSidebarOpen', 'selectedTabName']),
   },
   methods: {
-    ...mapActions('sidebar', { updateSelectedItemName: 'updateSelectedItemName' }),
-    selectItem(itemName) {
-      this.updateSelectedItemName(itemName)
+    ...mapActions('sidebar', { updateSelectedTabName: 'updateSelectedTabName' }),
+    selectTab(itemName) {
+      this.updateSelectedTabName(itemName)
     },
   },
 }
 </script>
 <style>
-.selected-item {
+.selected-tab {
   font-weight: 500;
   color: var(--vt-primary);
 }

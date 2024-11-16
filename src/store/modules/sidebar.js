@@ -1,21 +1,21 @@
 const state = {
-  isOpen: true,
-  selectedItemName: 'all',
+  isSidebarOpen: true,
+  selectedTabName: 'all',
 }
 const getters = {
   getSidebarState(state) {
-    return state.isOpen
+    return state.isSidebarOpen
   },
-  getSelectedItemName(state) {
-    return state.selectedItemName
+  getSelectedTabName(state) {
+    return state.selectedTabName
   },
 }
 const mutations = {
   setSidebarState(state, value) {
-    state.isOpen = value
+    state.isSidebarOpen = value
   },
-  setSelectedItemName(state, itemName) {
-    state.selectedItemName = itemName
+  setSelectedTabName(state, tabName) {
+    state.selectedTabName = tabName
   },
 }
 
@@ -23,8 +23,8 @@ const actions = {
   updateSidebarState({ commit }, value) {
     commit('setSidebarState', value)
   },
-  updateSelectedItemName({ commit }, itemName) {
-    commit('setSelectedItemName', itemName)
+  updateSelectedTabName({ commit }, tabName) {
+    commit('setSelectedTabName', tabName)
   },
 }
 

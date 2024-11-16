@@ -58,7 +58,6 @@ const mutations = {
     }
     state.filteredProfiles = [...state.profiles]
   },
-
   addProfile: (state, profile) => {
     state.profiles = [profile, ...state.profiles]
     state.filteredProfiles = [profile, ...state.filteredProfiles]
@@ -79,7 +78,6 @@ const mutations = {
     state.profiles = state.profiles.filter((profile) => profile.id !== profileId)
     state.filteredProfiles = state.filteredProfiles.filter((profile) => profile.id !== profileId)
   },
-
   setLoading: (state, loading) => {
     state.loading = loading
   },
@@ -100,24 +98,10 @@ const actions = {
       commit('setLoading', false)
     }
   },
-  updateFilterState({ commit }, value) {
-    commit('setFilterState', value)
-  },
-  setFilters({ commit }, filters) {
-    commit('setFilters', filters)
-    commit('applyFilters')
-  },
-  applyFilters({ commit }) {
-    commit('applyFilters')
-  },
-  resetFilters({ commit }) {
-    commit('resetFilters')
-  },
   async addProfile({ commit }, newProfile) {
     commit('setLoading', true)
     try {
-      const { id, ...profileWithoutId } = newProfile
-      const response = await axios.post('https://retoolapi.dev/ilF1Pj/profiles', profileWithoutId)
+      const response = await axios.post('https://retoolapi.dev/ilF1Pj/profiles', newProfile)
       commit('addProfile', response.data)
     } catch (error) {
       commit('setError', error.message)
@@ -125,7 +109,6 @@ const actions = {
       commit('setLoading', false)
     }
   },
-
   async updateProfile({ commit }, updatedProfile) {
     commit('setLoading', true)
     try {
@@ -140,7 +123,6 @@ const actions = {
       commit('setLoading', false)
     }
   },
-
   async deleteProfile({ commit }, profileId) {
     commit('setLoading', true)
     try {
@@ -151,6 +133,19 @@ const actions = {
     } finally {
       commit('setLoading', false)
     }
+  },
+  updateFilterState({ commit }, value) {
+    commit('setFilterState', value)
+  },
+  setFilters({ commit }, filters) {
+    commit('setFilters', filters)
+    commit('applyFilters')
+  },
+  applyFilters({ commit }) {
+    commit('applyFilters')
+  },
+  resetFilters({ commit }) {
+    commit('resetFilters')
   },
 }
 

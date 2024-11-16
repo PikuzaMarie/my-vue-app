@@ -1,12 +1,11 @@
 <template>
   <v-navigation-drawer
     v-model="isFilterOpen"
-    width="434"
-    transition="transform 0.3s ease"
-    permanent
     location="right"
+    width="434"
     class="d-flex ga-4 pt-8 pr-8 pb-8 pl-8"
     elevation="2"
+    permanent
   >
     <v-form ref="filterForm" class="d-flex flex-md-column justify-space-between fill-height">
       <v-card variant="text" class="d-flex flex-md-column ga-md-1">
