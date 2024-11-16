@@ -90,6 +90,8 @@
         @click:row="handleRowClick"
         class="d-flex flex-column flex-md-grow-1"
         items-per-page-text="Количество элементов на странице:"
+        :items-per-page-options="[5, 10, 20, 50, -1]"
+        :items-per-page="5"
         page-text="{0}-{1} из {2}"
       >
         <template v-slot:item="{ item }">
