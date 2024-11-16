@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <v-sheet elevation="4" class="pl-8 pr-5">
+    <v-sheet elevation="4" class="d-flex flex-md-column pt-5 pl-8 pr-5">
       <!-- Toolbar with title, refresh btn and dropdown menu -->
-      <v-toolbar color="white" class="d-flex align-center">
+      <v-toolbar color="white" class="d-flex align-center pl-4">
         <div class="d-flex align-center">
           <v-toolbar-title class="text-h6">{{ getTitle() }}</v-toolbar-title>
           <v-btn icon @click="refreshProfiles" color="primary">
@@ -88,6 +88,7 @@
         :items="filteredProfilesForTable()"
         :loading="loading"
         @click:row="handleRowClick"
+        class="d-flex flex-column flex-md-grow-1"
         items-per-page-text="Количество элементов на странице:"
         page-text="{0}-{1} из {2}"
       >
@@ -386,9 +387,9 @@ export default {
 </script>
 <style>
 .container {
-  width: 75%;
-  position: relative;
-  margin: 70px 0 4px 350px;
+  display: flex;
+  flex-direction: column;
+  margin: 70px 0 0 350px;
 }
 thead tr th span {
   font-weight: 600;
@@ -396,5 +397,15 @@ thead tr th span {
 tbody tr:hover,
 .selected-row {
   background-color: var(--color-hover);
+}
+.v-sheet {
+  height: calc(100vh - 95px);
+  /*64 + 10 + 21 = 95 
+    header height 64px, 
+    spacing b/w header and table 10px, 
+    spacing b/w table and the bottom of the screen 21px*/
+}
+.v-data-table-footer {
+  margin-top: auto;
 }
 </style>
