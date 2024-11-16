@@ -70,8 +70,18 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <!--Error alert if any occur-->
-      <v-alert v-if="error" type="error" dismissible>{{ error }}</v-alert>
+      <!--Error alert if any occur on create/update/delete profiles-->
+      <v-alert
+        v-if="error"
+        color="error"
+        variant="tonal"
+        border="start"
+        border-color="error"
+        density="compact"
+        closable
+      >
+        {{ error }}
+      </v-alert>
       <!-- Data Table with profiles and pagination-->
       <v-data-table
         :headers="getHeaders"
