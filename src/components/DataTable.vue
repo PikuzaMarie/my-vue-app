@@ -348,7 +348,7 @@ export default {
         this.addProfile(updatedProfile)
       }
 
-      this.dialog = false
+      this.showCreateUpdateDialog = false
       this.selectedProfile = null
     },
     getActiveTabTitle() {
