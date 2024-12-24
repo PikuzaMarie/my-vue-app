@@ -40,36 +40,25 @@ To get started with this project, follow these steps:
 ### Prerequisites
 
 Ensure you have the following installed on your machine:
-- Node.js (version 18 or higher), the project is build with **20.18.0 Node.js** version
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Node.js (version 18 or higher)
 
 ## Project Setup
-
+1. Clone project repository:
+```sh
+git clone https://github.com/PikuzaMarie/vue-profile-management.git
+```
+2. Go to the project directory:
+```sh
+cd vue-profile-management
+```
+3. Install dependencies:
 ```sh
 npm install
 ```
-
-### Compile and Hot-Reload for Development
-
+4. Run the project:
 ```sh
 npm run dev
 ```
+5. Copy the link http://localhost:5173/ and open it in your browser
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+Voila! Enjoy the app ;)
